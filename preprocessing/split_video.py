@@ -5,7 +5,7 @@ import argparse
 import os
 import cv2 
 
-def extractImages(pathIn):
+def extract_images(pathIn):
     videos_path = "/Users/user/downloads/ds1"
     video_list = (os.listdir("/Users/user/downloads/ds1"))
     for video in video_list:
@@ -19,10 +19,10 @@ def extractImages(pathIn):
             success,image = vidcap.read()
             print('Read a new frame: %d'% count) 
             cv2.imwrite(os.path.abspath(os.getcwd())+"/image_folder/" + "/frame-"+video+str(count)+".jpg", image)
-            count += 1
+            count += 1 
 
 if __name__=="__main__":
     a = argparse.ArgumentParser()
     a.add_argument("--pathIn", help="path to video")
     args = a.parse_args()
-    extractImages(args.pathIn)
+    extract_images(args.pathIn)
