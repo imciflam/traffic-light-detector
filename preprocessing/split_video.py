@@ -4,19 +4,22 @@ import sys
 import argparse
 import os
 import cv2
-print(cv2.__version__)
 
 def extractImages(pathIn):
-    count = 0
-    vidcap = cv2.VideoCapture(pathIn)
-    success,image = vidcap.read()
-    success = True
-    while (success and count < 300):
-        vidcap.set(cv2.CAP_PROP_POS_MSEC,(count*1000))    # added this line 
+    videos_path = "/Users/user/downloads/ds1"
+    video_list = (os.listdir("/Users/user/downloads/ds1"))
+    for video in video_list:
+        count = 0
+        current_video_path = videos_path+'/'+ video
+        vidcap = cv2.VideoCapture(current_video_path)
         success,image = vidcap.read()
-        print('Read a new frame: %d'% count)
-        cv2.imwrite(os.path.abspath(os.getcwd())+"/image_folder" + "/frame%d.jpg" % count, image)    # save frame as JPEG file
-        count += 1
+        success = True
+        while (success and count < 200):
+            vidcap.set(cv2.CAP_PROP_POS_MSEC,(count*5000))    # added this line 
+            success,image = vidcap.read()
+            print('Read a new frame: %d'% count)
+            cv2.imwrite(os.path.abspath(os.getcwd())+"/image_folder/" + "/frame%d.jpg" % count, image)    # save frame as JPEG file
+            count += 1
 
 if __name__=="__main__":
     a = argparse.ArgumentParser()
