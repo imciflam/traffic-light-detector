@@ -17,9 +17,8 @@ def extractImages(pathIn):
         while (success and count < 50):
             vidcap.set(cv2.CAP_PROP_POS_MSEC,(count*1000))    # sampling rate 
             success,image = vidcap.read()
-            print('Read a new frame: %d'% count)
-
-            cv2.imwrite(os.path.abspath(os.getcwd())+"/image_folder/" + "/frame-"+str(count)+video+".jpg", image)
+            print('Read a new frame: %d'% count) 
+            cv2.imwrite(os.path.abspath(os.getcwd())+"/image_folder/" + "/frame-"+video+str(count)+".jpg", image)
             count += 1
 
 if __name__=="__main__":
