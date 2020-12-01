@@ -12,8 +12,8 @@ def change_contrast():
     if image is None:
         print('Could not open or find the image')
 
-    alpha = 1.0 # Simple contrast control
-    beta = 0    # Simple brightness control
+    alpha = 1.2 # Simple contrast control
+    beta = 0.2    # Simple brightness control
     new_image = np.zeros(image.shape, image.dtype)
 
     for y in range(image.shape[0]):
