@@ -8,13 +8,14 @@ def change_contrast():
     images_path = os.getcwd() + "/image_folder/"
     images_list = (os.listdir(images_path)) 
     for image_item in images_list:
-        count = 0
+        if image_item.startswith( '.' ):
+            continue
         image = cv2.imread(images_path+image_item)
         if image is None:
             print('Could not open or find the image')
 
         alpha = 1.2 # Simple contrast control
-        beta = 0.2    # Simple brightness control
+        beta = 0    # Simple brightness control
         new_image = np.zeros(image.shape, image.dtype)
 
         for y in range(image.shape[0]):
@@ -22,7 +23,7 @@ def change_contrast():
                 for c in range(image.shape[2]):
                     new_image[y,x,c] = np.clip(alpha*image[y,x,c] + beta, 0, 255)
         
-        cv2.imwrite((os.getcwd())+"/image_folder_contrast/" + "/frame-"+image_item, image)
+        cv2.imwrite((os.getcwd())+"/image_folder_contrast/" + "/frame-"+image_item, new_image)
 
 
     # cv2.imshow('Original Image', image)
