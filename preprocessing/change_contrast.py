@@ -28,4 +28,5 @@ def change_contrast():
 
 
 if __name__=="__main__": 
+    # test hook commit
     change_contrast()
