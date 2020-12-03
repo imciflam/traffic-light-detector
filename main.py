@@ -10,6 +10,7 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 import time
 import cv2
+import random
 
 
 def detect_red(img, Threshold=0.01):
@@ -130,7 +131,7 @@ def plot_origin_image(image_np, boxes, classes, scores, category_index):
     plt.imshow(image_np)
 
     # save augmented images into hard drive
-    # plt.savefig( 'output_images/ouput_' + str(idx) +'.png')
+    plt.savefig('output_images/output_' + str(random.randint(0, 100)) + '.png')
     plt.show()
 
 
@@ -220,12 +221,13 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
                     scores), np.squeeze(classes).astype(np.int32))
                 print(result)
                 result_red = result['red_flag']
-                if result_red:
-                    print('{}: stop'.format(image_path))  # red or yellow
-                    commands.append(False)
+                result_green = result['green_flag']
+                if (result_red):
+                    commands.append("red")
+                if (result_green):
+                    commands.append("green")
                 else:
-                    print('{}: go'.format(image_path))
-                    commands.append(True)
+                    commands.append("none")
 
                 # Visualization of the results of a detection.
                 if plot_flag:
@@ -237,7 +239,7 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
 
 if __name__ == "__main__":
 
-    Num_images = 3
+    Num_images = 1
     PATH_TO_TEST_IMAGES_DIR = './test_images'
     MODEL_NAME = 'faster_rcnn_resnet101_coco_11_06_2017'
 
