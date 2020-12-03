@@ -47,6 +47,41 @@ def detect_red(img, Threshold=0.01):
         return False
 
 
+def detect_green(img, Threshold=0.01):
+    """
+    detect green
+    :param img:
+    :param Threshold:
+    :return:
+    """
+
+    desired_dim = (30, 90)  # width, height
+    img = cv2.resize(np.array(img), desired_dim,
+                     interpolation=cv2.INTER_LINEAR)
+    img_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+
+    # lower mask (0-10)
+    lower_green = np.array([30, 0, 0])
+    upper_green = np.array([90, 255, 255])
+    mask0 = cv2.inRange(img_hsv, lower_green, upper_green)
+
+    # upper mask (170-180)
+    lower_green = np.array([40, 0, 0])
+    upper_green = np.array([80, 255, 255])
+    mask1 = cv2.inRange(img_hsv, lower_green, upper_green)
+
+    # green pixels' mask
+    mask = mask0+mask1
+
+    # Compare the percentage of red values
+    rate = np.count_nonzero(mask) / (desired_dim[0] * desired_dim[1])
+
+    if rate > Threshold:
+        return True
+    else:
+        return False
+
+
 def load_image_into_numpy_array(image):
     (im_width, im_height) = image.size
     return np.array(image.getdata()).reshape(
@@ -56,6 +91,8 @@ def load_image_into_numpy_array(image):
 def read_traffic_lights(image, boxes, scores, classes, max_boxes_to_draw=20, min_score_thresh=0.5, traffic_ligth_label=10):
     im_width, im_height = image.size
     red_flag = False
+    green_flag = False
+    flag_dict = dict()
     for i in range(min(max_boxes_to_draw, boxes.shape[0])):
         if scores[i] > min_score_thresh and classes[i] == traffic_ligth_label:
             ymin, xmin, ymax, xmax = tuple(boxes[i].tolist())
@@ -64,9 +101,16 @@ def read_traffic_lights(image, boxes, scores, classes, max_boxes_to_draw=20, min
             crop_img = image.crop((left, top, right, bottom))
 
             if detect_red(crop_img):
-                red_flag = True
+                flag_dict['red_flag'] = True
+                flag_dict['green_flag'] = False
+            if detect_green(crop_img):
+                flag_dict['green_flag'] = True
+                flag_dict['red_flag'] = False
+            else:
+                flag_dict['red_flag'] = False
+                flag_dict['green_flag'] = False
 
-    return red_flag
+    return flag_dict
 
 
 def plot_origin_image(image_np, boxes, classes, scores, category_index):
@@ -95,7 +139,6 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
     Detect traffic lights and draw bounding boxes around the traffic lights
     :param PATH_TO_TEST_IMAGES_DIR: testing image directory
     :param MODEL_NAME: name of the model used in the task
-    :return: commands: True: go, False: stop
     """
 
     # --------test images------
@@ -141,9 +184,7 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
     categories = label_map_util.convert_label_map_to_categories(label_map,
                                                                 max_num_classes=NUM_CLASSES,
                                                                 use_display_name=True)
-    print(categories)
     category_index = label_map_util.create_category_index(categories)
-    print(category_index)
     with detection_graph.as_default():
         with tf.compat.v1.Session(graph=detection_graph) as sess:
             # Definite input and output Tensors for detection_graph
@@ -175,25 +216,16 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
                     feed_dict={image_tensor: image_np_expanded})
                 # print([category_index.get(i) for i in classes[0]])
                 # print(scores) # traffic lights are first
-                red_flag = read_traffic_lights(image, np.squeeze(boxes), np.squeeze(
+                result = read_traffic_lights(image, np.squeeze(boxes), np.squeeze(
                     scores), np.squeeze(classes).astype(np.int32))
-                if red_flag:
+                print(result)
+                result_red = result['red_flag']
+                if result_red:
                     print('{}: stop'.format(image_path))  # red or yellow
                     commands.append(False)
                 else:
                     print('{}: go'.format(image_path))
                     commands.append(True)
-                vis_util.visualize_boxes_and_labels_on_image_array(
-                    image_np,
-                    np.squeeze(boxes),
-                    np.squeeze(classes).astype(np.int32),
-                    np.squeeze(scores),
-                    category_index,
-                    use_normalized_coordinates=True,
-                    line_thickness=8, min_score_thresh=.2)
-                plt.figure(figsize=IMAGE_SIZE)
-                plt.imshow(image_np)
-                plt.show()
 
                 # Visualization of the results of a detection.
                 if plot_flag:
@@ -205,10 +237,10 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
 
 if __name__ == "__main__":
 
-    Num_images = 2
+    Num_images = 3
     PATH_TO_TEST_IMAGES_DIR = './test_images'
     MODEL_NAME = 'faster_rcnn_resnet101_coco_11_06_2017'
 
     commands = detect_traffic_lights(
-        PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_flag=False)
+        PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_flag=True)
     print(commands)
