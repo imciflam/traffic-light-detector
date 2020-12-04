@@ -132,3 +132,6 @@ dmypy.json
 # custom
 /preprocessing/image_folder
 faster_rcnn_resnet101_coco_11_06_2017/frozen_inference_graph.pb
+/green
+/red
+/output_images
