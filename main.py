@@ -74,7 +74,7 @@ def detect_green(img, Threshold=0.01):
     # green pixels' mask
     mask = mask0+mask1
 
-    # Compare the percentage of red values
+    # Compare the percentage of green values
     rate = np.count_nonzero(mask) / (desired_dim[0] * desired_dim[1])
 
     if rate > Threshold:
@@ -114,7 +114,7 @@ def read_traffic_lights(image, boxes, scores, classes, max_boxes_to_draw=20, min
     return flag_dict
 
 
-def plot_origin_image(image_np, boxes, classes, scores, category_index): 
+def plot_origin_image(image_np, boxes, classes, scores, category_index):
     # Size of the output images.
     IMAGE_SIZE = (12, 8)
     vis_util.visualize_boxes_and_labels_on_image_array(
