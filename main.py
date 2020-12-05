@@ -10,6 +10,7 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 import time
 import cv2
+import random
 
 
 def detect_red(img, Threshold=0.01):
@@ -83,11 +84,12 @@ def plot_origin_image(image_np, boxes, classes, scores, category_index):
         use_normalized_coordinates=True,
         line_thickness=3)
     plt.figure(figsize=IMAGE_SIZE)
-    plt.imshow(image_np)
+    # plt.imshow(image_np)
 
     # save augmented images into hard drive
-    # plt.savefig( 'output_images/ouput_' + str(idx) +'.png')
-    plt.show()
+    plt.savefig('output_images/output_' +
+                str(random.randint(0, 1000)) + '.png')
+    # plt.show()
 
 
 def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_flag=False):
@@ -141,9 +143,9 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
     categories = label_map_util.convert_label_map_to_categories(label_map,
                                                                 max_num_classes=NUM_CLASSES,
                                                                 use_display_name=True)
-    print(categories)
+    # print(categories)
     category_index = label_map_util.create_category_index(categories)
-    print(category_index)
+    # print(category_index)
     with detection_graph.as_default():
         with tf.compat.v1.Session(graph=detection_graph) as sess:
             # Definite input and output Tensors for detection_graph
@@ -192,8 +194,8 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
                     use_normalized_coordinates=True,
                     line_thickness=8, min_score_thresh=.2)
                 plt.figure(figsize=IMAGE_SIZE)
-                plt.imshow(image_np)
-                plt.show()
+                # plt.imshow(image_np)
+                # plt.show()
 
                 # Visualization of the results of a detection.
                 if plot_flag:
@@ -205,10 +207,10 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
 
 if __name__ == "__main__":
 
-    Num_images = 2
-    PATH_TO_TEST_IMAGES_DIR = './test_images'
+    Num_images = 37
+    PATH_TO_TEST_IMAGES_DIR = './red'
     MODEL_NAME = 'faster_rcnn_resnet101_coco_11_06_2017'
 
     commands = detect_traffic_lights(
-        PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_flag=False)
+        PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_flag=True)
     print(commands)
