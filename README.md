@@ -16,7 +16,7 @@ to split videos into frames.
 python change_contrast.py
 ```
 
-### Making predictions
+### Making predictions:
 
 1. Put your images to test_images folder
 2. run
@@ -24,7 +24,7 @@ python change_contrast.py
 python main.py
 ```
 
-### Result
+### Result:
 
 ![alt text](https://github.com/imciflam/traffic-lights-detector/blob/main/example/example.png)
 
