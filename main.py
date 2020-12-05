@@ -11,6 +11,7 @@ from utils import visualization_utils as vis_util
 import time
 import cv2
 import random
+import time
 
 
 def detect_red(img, Threshold=0.01):
@@ -231,10 +232,11 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
 
 if __name__ == "__main__":
 
-    Num_images = 60
+    Num_images = 30
     PATH_TO_TEST_IMAGES_DIR = './green'
     MODEL_NAME = 'faster_rcnn_resnet101_coco_11_06_2017'
-
+    start = time.time()
     commands = detect_traffic_lights(
         PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_flag=True)
-    print(commands)
+    end = time.time()
+    print(end - start)
