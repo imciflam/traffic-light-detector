@@ -114,8 +114,7 @@ def read_traffic_lights(image, boxes, scores, classes, max_boxes_to_draw=20, min
     return flag_dict
 
 
-def plot_origin_image(image_np, boxes, classes, scores, category_index):
-
+def plot_origin_image(image_np, boxes, classes, scores, category_index): 
     # Size of the output images.
     IMAGE_SIZE = (12, 8)
     vis_util.visualize_boxes_and_labels_on_image_array(
@@ -131,8 +130,9 @@ def plot_origin_image(image_np, boxes, classes, scores, category_index):
     plt.imshow(image_np)
 
     # save augmented images into hard drive
-    plt.savefig('output_images/output_' + str(random.randint(0, 100)) + '.png')
-    plt.show()
+    plt.savefig('output_images/output_' +
+                str(random.randint(0, 10000000)) + '.png')
+    # plt.show()
 
 
 def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_flag=False):
@@ -220,14 +220,6 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
                 result = read_traffic_lights(image, np.squeeze(boxes), np.squeeze(
                     scores), np.squeeze(classes).astype(np.int32))
                 print(result)
-                result_red = result['red_flag']
-                result_green = result['green_flag']
-                if (result_red):
-                    commands.append("red")
-                if (result_green):
-                    commands.append("green")
-                else:
-                    commands.append("none")
 
                 # Visualization of the results of a detection.
                 if plot_flag:
@@ -239,8 +231,8 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
 
 if __name__ == "__main__":
 
-    Num_images = 1
-    PATH_TO_TEST_IMAGES_DIR = './test_images'
+    Num_images = 60
+    PATH_TO_TEST_IMAGES_DIR = './green'
     MODEL_NAME = 'faster_rcnn_resnet101_coco_11_06_2017'
 
     commands = detect_traffic_lights(
