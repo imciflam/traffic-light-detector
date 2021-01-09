@@ -232,8 +232,8 @@ def detect_traffic_lights(PATH_TO_TEST_IMAGES_DIR, MODEL_NAME, Num_images, plot_
 
 if __name__ == "__main__":
 
-    Num_images = 30
-    PATH_TO_TEST_IMAGES_DIR = './green'
+    Num_images = 1
+    PATH_TO_TEST_IMAGES_DIR = './test_images'
     MODEL_NAME = 'faster_rcnn_resnet101_coco_11_06_2017'
     start = time.time()
     commands = detect_traffic_lights(
