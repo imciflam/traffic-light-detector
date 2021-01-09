@@ -134,5 +134,5 @@ dmypy.json
 faster_rcnn_resnet101_coco_11_06_2017/frozen_inference_graph.pb
 /green
 /red
-/output_images
+/output_images/*.png
 faster_rcnn_resnet101_coco_11_06_2017.tar.gz
